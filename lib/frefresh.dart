@@ -359,7 +359,7 @@ class FRefresh extends StatefulWidget {
 }
 
 class _FRefreshState extends State<FRefresh> {
-  ValueNotifier<ScrollNotification?>? _scrollNotifier;
+  //ValueNotifier<ScrollNotification>? _scrollNotifier;
   ValueNotifier<RefreshState>? _stateNotifier;
   ValueNotifier<LoadState>? _loadStateNotifier;
   ValueNotifier<bool>? _scrollToRefreshNotifier;
@@ -378,7 +378,7 @@ class _FRefreshState extends State<FRefresh> {
   @override
   // ignore: must_call_super
   void initState() {
-    _scrollNotifier = ValueNotifier(null);
+    //_scrollNotifier = ValueNotifier(ScrollNotification.) as ValueNotifier<ScrollNotification>;//ValueNotifier(ScrollNotification);
     _stateNotifier = ValueNotifier(RefreshState.IDLE);
     _loadStateNotifier = ValueNotifier(LoadState.IDLE);
     _scrollToRefreshNotifier = ValueNotifier(false);
@@ -445,7 +445,7 @@ class _FRefreshState extends State<FRefresh> {
     _loadStateNotifier?.value = LoadState.FINISHING;
     _scrollController!
         .animateTo(
-            _scrollController!.position!.maxScrollExtent - widget.footerHeight!,
+            _scrollController!.position.maxScrollExtent - widget.footerHeight!,
             duration: Duration(milliseconds: 300),
             curve: Curves.linear)
         .whenComplete(() {
@@ -482,7 +482,7 @@ class _FRefreshState extends State<FRefresh> {
       slivers.add(_Header(
         headerHeight: widget.headerHeight!,
         triggerOffset: widget.headerTrigger!,
-        scrollNotifier: _scrollNotifier! as ValueNotifier<ScrollNotification>,
+        //scrollNotifier: _scrollNotifier! as ValueNotifier<ScrollNotification>,
         stateNotifier: _stateNotifier!,
         visibleNotifier: visibleNotifier!,
         scrollToRefreshNotifier: _scrollToRefreshNotifier!,
@@ -635,7 +635,7 @@ class _FRefreshState extends State<FRefresh> {
   void dispose() {
     super.dispose();
     _scrollController?.dispose();
-    _scrollNotifier?.dispose();
+    //_scrollNotifier?.dispose();
     _stateNotifier?.dispose();
     _loadStateNotifier?.dispose();
     _scrollToRefreshNotifier?.dispose();
@@ -646,7 +646,7 @@ class _FRefreshState extends State<FRefresh> {
 
 // ignore: must_be_immutable
 class _Header extends StatefulWidget {
-  final ValueNotifier<ScrollNotification>? scrollNotifier;
+  //final ValueNotifier<ScrollNotification>? scrollNotifier;
   final ValueNotifier<RefreshState>? stateNotifier;
   final ValueNotifier<bool>? scrollToRefreshNotifier;
   final ValueNotifier<bool>? visibleNotifier;
@@ -658,7 +658,7 @@ class _Header extends StatefulWidget {
 
   _Header({
     Key? key,
-    this.scrollNotifier,
+    //this.scrollNotifier,
     this.stateNotifier,
     this.scrollToRefreshNotifier,
     this.visibleNotifier,
