@@ -22,11 +22,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  FRefreshController controller1;
-  FRefreshController controller2;
-  FRefreshController controller3;
-  FRefreshController controller4;
-  FRefreshController controller5;
+  FRefreshController? controller1;
+  FRefreshController? controller2;
+  FRefreshController? controller3;
+  FRefreshController? controller4;
+  FRefreshController? controller5;
   bool canLoad = true;
   int clickCount = 0;
 
@@ -46,8 +46,8 @@ class _MyAppState extends State<MyApp> {
 
   String text4 = "Drop-down to loading";
 
-  Color textColor;
-  List<Color> colorList;
+  Color? textColor;
+  List<Color>? colorList;
 
   @override
   void initState() {
@@ -64,25 +64,25 @@ class _MyAppState extends State<MyApp> {
     ];
 //    FRefresh.debug = true;
     controller1 = FRefreshController();
-    controller1.setOnStateChangedCallback((state) {
+    controller1!.setOnStateChangedCallback((state) {
       print('state = $state');
       if (state is RefreshState) {}
     });
-    controller1.setOnScrollListener((metrics) {});
+    controller1!.setOnScrollListener((metrics) {});
 
     controller2 = FRefreshController();
-    controller2.setOnStateChangedCallback((state) {
+    controller2!.setOnStateChangedCallback((state) {
       print('state = $state');
     });
 
     controller3 = FRefreshController();
-    controller3.setOnStateChangedCallback((state) {
+    controller3!.setOnStateChangedCallback((state) {
       print('state = $state');
     });
     controller4 = FRefreshController();
 
     controller5 = FRefreshController();
-    controller5.setOnStateChangedCallback((state) {
+    controller5!.setOnStateChangedCallback((state) {
       print('state = $state');
     });
   }
@@ -260,7 +260,7 @@ class _MyAppState extends State<MyApp> {
       return FRefresh(
         controller: controller4,
         footerBuilder: (setter) {
-          controller4.setOnStateChangedCallback((state) {
+          controller4!.setOnStateChangedCallback((state) {
             setter(() {
               if (controller4.loadState == LoadState.PREPARING_LOAD) {
                 text4 = "Release to load";
