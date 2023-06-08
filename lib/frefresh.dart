@@ -359,7 +359,6 @@ class FRefresh extends StatefulWidget {
 }
 
 class _FRefreshState extends State<FRefresh> {
-  //ValueNotifier<ScrollNotification>? _scrollNotifier;
   ValueNotifier<RefreshState>? _stateNotifier;
   ValueNotifier<LoadState>? _loadStateNotifier;
   ValueNotifier<bool>? _scrollToRefreshNotifier;
@@ -378,7 +377,6 @@ class _FRefreshState extends State<FRefresh> {
   @override
   // ignore: must_call_super
   void initState() {
-    //_scrollNotifier = ValueNotifier(ScrollNotification.) as ValueNotifier<ScrollNotification>;//ValueNotifier(ScrollNotification);
     _stateNotifier = ValueNotifier(RefreshState.IDLE);
     _loadStateNotifier = ValueNotifier(LoadState.IDLE);
     _scrollToRefreshNotifier = ValueNotifier(false);
@@ -424,8 +422,8 @@ class _FRefreshState extends State<FRefresh> {
     _stateNotifier?.value = RefreshState.FINISHING;
     _scrollController!
         .animateTo(widget.headerHeight!,
-            duration: Duration(milliseconds: FRefresh.debug ? 2000 : 300),
-            curve: Curves.linear)
+        duration: Duration(milliseconds: FRefresh.debug ? 2000 : 300),
+        curve: Curves.linear)
         .whenComplete(() {
       _scrollController!.jumpTo(0);
       _stateNotifier?.value = RefreshState.IDLE;
@@ -445,9 +443,9 @@ class _FRefreshState extends State<FRefresh> {
     _loadStateNotifier?.value = LoadState.FINISHING;
     _scrollController!
         .animateTo(
-            _scrollController!.position.maxScrollExtent - widget.footerHeight!,
-            duration: Duration(milliseconds: 300),
-            curve: Curves.linear)
+        _scrollController!.position.maxScrollExtent - widget.footerHeight!,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.linear)
         .whenComplete(() {
       _loadStateNotifier?.value = LoadState.IDLE;
       visibleNotifier?.value = false;
@@ -482,13 +480,12 @@ class _FRefreshState extends State<FRefresh> {
       slivers.add(_Header(
         headerHeight: widget.headerHeight!,
         triggerOffset: widget.headerTrigger!,
-        //scrollNotifier: _scrollNotifier! as ValueNotifier<ScrollNotification>,
         stateNotifier: _stateNotifier!,
         visibleNotifier: visibleNotifier!,
         scrollToRefreshNotifier: _scrollToRefreshNotifier!,
         scrollController: _scrollController!,
         child: widget.header!,
-        build: widget.headerBuilder!,
+        build: widget.headerBuilder,
       ));
     }
     if (widget.child != null) {
@@ -497,18 +494,18 @@ class _FRefreshState extends State<FRefresh> {
     if (isFooterShow()) {
       slivers.add(Footer(
           child: Container(
-        color: FRefresh.debug ? Colors.black38 : null,
-        height: widget.footerHeight,
-        child: _VisibleContainer(
-            visibleNotifier: visibleNotifier,
-            child: widget.footerBuilder == null
-                ? widget.footer
-                : StatefulBuilder(
-                    builder: (context, setter) {
-                      return widget.footerBuilder!(setter);
-                    },
-                  )),
-      )));
+            color: FRefresh.debug ? Colors.black38 : null,
+            height: widget.footerHeight,
+            child: _VisibleContainer(
+                visibleNotifier: visibleNotifier,
+                child: widget.footerBuilder == null
+                    ? widget.footer
+                    : StatefulBuilder(
+                  builder: (context, setter) {
+                    return widget.footerBuilder!(setter);
+                  },
+                )),
+          )));
     }
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification notification) {
@@ -584,7 +581,7 @@ class _FRefreshState extends State<FRefresh> {
           }
         }
         if ((notification is UserScrollNotification ||
-                notification is ScrollEndNotification) &&
+            notification is ScrollEndNotification) &&
             checkRefreshState(RefreshState.IDLE) &&
             checkLoadState(LoadState.IDLE) &&
             (visibleNotifier?.value ?? false)) {
@@ -624,18 +621,17 @@ class _FRefreshState extends State<FRefresh> {
 
   bool isFooterShow() =>
       (widget.footer != null || widget.footerBuilder != null) &&
-      widget.footerHeight != null &&
-      widget.footerHeight! > 0;
+          widget.footerHeight != null &&
+          widget.footerHeight! > 0;
 
   bool isHeaderShow() =>
       (widget.header != null || widget.headerBuilder != null) &&
-      widget.headerHeight! > 0;
+          widget.headerHeight! > 0;
 
   @override
   void dispose() {
     super.dispose();
     _scrollController?.dispose();
-    //_scrollNotifier?.dispose();
     _stateNotifier?.dispose();
     _loadStateNotifier?.dispose();
     _scrollToRefreshNotifier?.dispose();
@@ -646,7 +642,6 @@ class _FRefreshState extends State<FRefresh> {
 
 // ignore: must_be_immutable
 class _Header extends StatefulWidget {
-  //final ValueNotifier<ScrollNotification>? scrollNotifier;
   final ValueNotifier<RefreshState>? stateNotifier;
   final ValueNotifier<bool>? scrollToRefreshNotifier;
   final ValueNotifier<bool>? visibleNotifier;
@@ -658,7 +653,6 @@ class _Header extends StatefulWidget {
 
   _Header({
     Key? key,
-    //this.scrollNotifier,
     this.stateNotifier,
     this.scrollToRefreshNotifier,
     this.visibleNotifier,
@@ -807,7 +801,7 @@ class _HeaderContainerRenderObject extends RenderSliverSingleBoxAdapter {
 
   bool get preparingRefresh =>
       stateNotifier != null &&
-      stateNotifier!.value == RefreshState.PREPARING_REFRESH;
+          stateNotifier!.value == RefreshState.PREPARING_REFRESH;
 
   bool get idle =>
       stateNotifier != null && stateNotifier!.value == RefreshState.IDLE;
@@ -847,7 +841,7 @@ class _HeaderContainerRenderObject extends RenderSliverSingleBoxAdapter {
   @override
   void performLayout() {
     final double overOffset =
-        constraints.overlap < 0.0 ? constraints.overlap.abs() : 0.0;
+    constraints.overlap < 0.0 ? constraints.overlap.abs() : 0.0;
 //    print('constraints = ${constraints.axisDirection}');
 //    print('overOffset = ${overOffset}');
     child!.layout(
@@ -969,8 +963,8 @@ class _HeaderContainerRenderObject extends RenderSliverSingleBoxAdapter {
   @override
   void paint(PaintingContext paintContext, Offset offset) {
     if (constraints.overlap < 0.0 ||
-            childSize > height ||
-            stateNotifier?.value != RefreshState.IDLE ??
+        childSize > height ||
+        stateNotifier?.value != RefreshState.IDLE ??
         false) {
       paintContext.paintChild(child!, offset);
     }
@@ -1028,7 +1022,7 @@ class FBouncingScrollPhysics extends BouncingScrollPhysics {
     assert(position.minScrollExtent <= position.maxScrollExtent);
     if (!outOfRange(position)) return offset;
     final double overscrollPastStart =
-        max(position.minScrollExtent - position.pixels, 0.0);
+    max(position.minScrollExtent - position.pixels, 0.0);
     final double overscrollPastEnd = max(
         position.pixels - (position.maxScrollExtent - (footerHeight ?? 0.0)),
         0.0);
@@ -1037,9 +1031,9 @@ class FBouncingScrollPhysics extends BouncingScrollPhysics {
         (overscrollPastEnd > 0.0 && offset > 0.0);
 //    print('overscrollPastEnd = ${overscrollPastEnd}, offset = ${offset}, easing = ${easing}');
     final double friction = easing
-        // Apply less resistance when easing the overscroll vs tensioning.
+    // Apply less resistance when easing the overscroll vs tensioning.
         ? frictionFactor(
-            (overscrollPast - offset.abs()) / position.viewportDimension)
+        (overscrollPast - offset.abs()) / position.viewportDimension)
         : frictionFactor(overscrollPast / position.viewportDimension);
     final double direction = offset.sign;
 
